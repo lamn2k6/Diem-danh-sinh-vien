@@ -186,14 +186,18 @@ class AttendanceApp:
         if sid and name and class_name:
             student = Student(sid, name, class_name)
             self.system.add_student(student)
-            messagebox.showinfo("Thành công", "Đã thêm sinh viên.")
+            messagebox.showinfo("Thành công", "Đã thêm sinh viên")
+        else:
+            messagebox.showerror("Lỗi", "Vui lòng nhập đầy đủ thông tin sinh viên")
 
     def mark_attendance(self):
         sid = self.entry_id.get()
         class_name = self.entry_class.get()
         if sid and class_name:
             self.system.mark_attendance(sid, class_name)
-            messagebox.showinfo("Thành công", "Đã điểm danh.")
+            messagebox.showinfo("Thành công", "Đã điểm danh")
+        else:
+            messagebox.showerror("Lỗi", "Vui lòng nhập đầy đủ thông tin (MSSV và lớp)")
 
     def view_all_history(self):
         records = self.system.get_attendance_record()
@@ -206,6 +210,8 @@ class AttendanceApp:
             self.text_area.delete("1.0", tk.END) 
             for r in records:
                 self.text_area.insert(tk.END, f"{r[0]} - {r[1]} - {r[2]}\n")
+        else:
+            messagebox.showerror("Lỗi", "Vui lòng nhập tên lớp")
 
     def view_student_attendance(self):
         sid = self.entry_id.get()
@@ -214,6 +220,8 @@ class AttendanceApp:
             self.text_area.delete("1.0", tk.END)
             for r in records: 
                 self.text_area.insert(tk.END, f"{r[0]} - {r[1]}\n")
+        else:
+            messagebox.showerror("Lỗi", "Vui lòng nhập MSSV")
     
     def view_by_date_range(self):
         start = tk.simpledialog.askstring("Từ ngày", "Nhập ngày bắt đầu (YYYY-MM-DD):")
@@ -224,6 +232,8 @@ class AttendanceApp:
                 self.display_records(records)
             except Exception as e:
                 messagebox.showerror("Lỗi", str(e))
+        else:
+            messagebox.showerror("Lỗi", "Vui lòng nhập cả ngày bắt đầu và ngày kết thúc.")
 
     def update_student_name(self):
         sid = self.entry_id.get()
@@ -231,6 +241,8 @@ class AttendanceApp:
         if sid and new_name:
             self.system.update_student_name(sid, new_name)
             messagebox.showinfo("Thành công", "Đã cập nhật tên sinh viên.")
+        else:
+            messagebox.showerror("Lỗi", "Vui lòng nhập đầy đủ MSSV và tên mới.")
 
     def delete_student(self):
         sid = self.entry_id.get()
@@ -240,7 +252,7 @@ class AttendanceApp:
 
     def export_csv(self):
         self.system.export_to_csv()
-        messagebox.showinfo("Xuất file", "Đã xuất file CSV.")
+        messagebox.showinfo("Xuất file", "Đã xuất file attendance_export.csv")
 
     def display_records(self, records):
         self.text_area.delete("1.0", tk.END)
